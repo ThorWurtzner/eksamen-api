@@ -4,6 +4,7 @@ var { sequelize } = require("../config/database");
 class Activity extends Model {};
 class User extends Model {};
 class Asset extends Model {};
+class Rating extends Model {};
 
 Activity.init({
 	name: DataTypes.TEXT,
@@ -28,6 +29,12 @@ Asset.init({
 	url: DataTypes.TEXT
 }, { sequelize, modelName: "asset" });
 
+Rating.init({
+	activityId: DataTypes.INTEGER,
+	userId: DataTypes.INTEGER,
+	rating: DataTypes.INTEGER
+}, { sequelize, modelName: "rating" });
+
 User.belongsToMany(Activity, { through: "roster" });
 Activity.belongsToMany(User, { through: "roster" });
 
@@ -39,7 +46,7 @@ Asset.hasOne(Activity, { foreignKey: "assetId" });
 
 sequelize.sync({ force: false })
 	.then(function() {
-		console.log("Tabels created");
+		console.log("Tables created");
 	})
 	.catch(function(error) {
 		console.error(error);
@@ -48,5 +55,6 @@ sequelize.sync({ force: false })
 module.exports = {
 	Activity,
 	User,
-	Asset
+	Asset, 
+	Rating
 };
